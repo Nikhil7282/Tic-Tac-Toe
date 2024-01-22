@@ -1,39 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./index.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./index.css" />
     <title>tic-tac-toe</title>
-</head>
-<body>
-    <div class="container">
-        <div class="board" id="board">
-            <div class="name"><span class="xcolor">X</span><span class="ocolor">O</span></div>
-            <div class="turn">X Turn</div>
-            <div class="refresh">⟳</div>
-            <div class="cell" data-cell></div>
-            <div class="cell" data-cell></div>
-            <div class="cell" data-cell></div>
-            <div class="cell" data-cell></div>
-            <div class="cell" data-cell></div>
-            <div class="cell" data-cell></div>
-            <div class="cell" data-cell></div>
-            <div class="cell" data-cell></div>
-            <div class="cell" data-cell></div>
-            <div id="x_win">X : 0</div>
-            <div id="tie">Ties : 0</div>
-            <div id="o_win">O : 0</div>
-        </div>
+  </head>
+  <body>
+    <div class="board" id="board">
+      <div class="cell" data-cell></div>
+      <div class="cell" data-cell></div>
+      <div class="cell" data-cell></div>
+      <div class="cell" data-cell></div>
+      <div class="cell" data-cell></div>
+      <div class="cell" data-cell></div>
+      <div class="cell" data-cell></div>
+      <div class="cell" data-cell></div>
+      <div class="cell" data-cell></div>
     </div>
-    <div class="win " id="win-txt">
-        <div data-win-mesg-txt>X wins</div>
-        <button class="btn" id="restart">Restart</button>
+    <div class="winning-message" id="winning-message">
+      <div class="message-text" id="message-text" data-winning-text>X wins</div>
+      <button class="restart" id="restart">Restart</button>
     </div>
     <script src="./index.js"></script>
-</body>
+  </body>
 </html>

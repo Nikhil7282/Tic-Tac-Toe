@@ -1,118 +1,101 @@
-const x_class='x';
-const c_class='circle';
+const x_class = "x";
+const o_class = "o";
+const cellElements = document.querySelectorAll("[data-cell]");
+const winning_message = document.querySelector(".winning-message");
+const winning_message_text = document.querySelector("[data-winning-text]");
+const restart = document.querySelector("#restart");
 
-const win_com=[
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
-    [0,4,8],
-    [2,4,6],
-    [0,3,6],
-    [1,4,7],
-    [2,5,8]
-]
-const cellele=document.querySelectorAll('[data-cell]');
-const boarde=document.getElementById("board");
-const winmsgtxt=document.getElementById('win-txt');
-const winmsg=document.querySelector('[data-win-mesg-txt]');
-const btn=document.getElementById('restart');
-const xw=document.getElementById('x_win');
-const ow=document.getElementById('o_win');
-const t=document.getElementById('tie');
-const turn=document.querySelector('.turn');
-const ref=document.querySelector('.refresh')
-ref.addEventListener('click', function() {
-    location.reload();
+restart.addEventListener("click", () => {
+  window.location.reload();
 });
 
-let cturn;
-var xwin=0;
-var owin=0;
-var tie=0;
-startgame();
+let circleTurn;
+const winning_combinations = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+];
 
-btn.addEventListener('click',startgame);
-
-function startgame(){
-    cturn=false;
-    cellele.forEach(cell=>{
-        cell.classList.remove(x_class);
-        cell.classList.remove(c_class);
-        cell.removeEventListener('click',handle);
-        cell.addEventListener('click',handle,{once:true})
-    });
-    setBoardHoverClass();
-    winmsgtxt.classList.remove('show');
-
+function startGame() {
+  circleTurn = false;
+  cellElements.forEach((cell) => {
+    cell.addEventListener("click", handleClick, { once: true });
+  });
 }
 
-function handle(e){
-    const cell=e.target;
-    const curr=cturn?c_class:x_class;
-    //placemark
-    placemark(cell,curr);
-    //check for draw
-    if(chechwin(curr)){
-        endgame(false);
-    } else if(isdraw()){
-        endgame(true);
+function placeMark(cell, currClass) {
+  cell.classList.add(currClass);
+  // console.log(cur);
+}
+
+function swapTurns() {
+  circleTurn = !circleTurn;
+}
+
+// function checkWin(currClass) {
+//   return winning_combinations.some((combination) => {
+//     return combination.every((index) => {
+//       return cellElements[index].classList.contains(currClass);
+//     });
+//   });
+// }
+
+function checkWin(currClass) {
+  let res = false;
+  for (let i = 0; i < winning_combinations.length; i++) {
+    let combination = winning_combinations[i];
+    let pass = true;
+    for (let j = 0; j < combination.length; j++) {
+      let index = combination[j];
+      if (!cellElements[index].classList.contains(currClass)) {
+        pass = false;
+        break;
+      }
     }
-    else{
-        swapturn();
-        setBoardHoverClass();
+    if (pass) {
+      res = true;
+      break;
     }
+  }
+  return res;
+}
+function isDraw() {
+  for (let i = 0; i < cellElements.length; i++) {
+    if (
+      !cellElements[i].classList.contains(x_class) &&
+      !cellElements[i].classList.contains(o_class)
+    ) {
+      return false;
+    }
+  }
+  return true;
 }
 
-function endgame(draw){
-    if(draw){
-        winmsg.innerText="Draw!"
-        tie+=1;
-        t.innerHTML="Ties : "+tie;
-    } else{
-        winmsg.innerText=`${cturn ?"O's":"X's"} Wins! `;
-        if(cturn){
-            owin+=1;
-            ow.innerHTML="O : "+owin;
-        }else{
-            xwin+=1;
-            xw.innerHTML="X : "+xwin;
-        }
-    }
-    winmsgtxt.classList.add('show');
-}
-function isdraw(){
-    return [...cellele].every(cell=>{
-        return cell.classList.contains(x_class) || cell.classList.contains(c_class);
-    })
+function endGame(draw) {
+  if (draw) {
+    console.log("Draw");
+  } else {
+    winning_message_text.innerText = `${circleTurn ? "O's" : "X's"} Wins`;
+  }
+  winning_message.classList.add("show");
 }
 
-function placemark(cell,curr){
-    cell.classList.add(curr);
-}
-function swapturn(){
-    if(cturn==false){
-        turn.innerHTML="O Turn"
-    }else{
-        turn.innerHTML="X Turn"
-    }
-    cturn=!cturn;
-    
-
-}
-function setBoardHoverClass(){
-    boarde.classList.remove(x_class);
-    boarde.classList.remove(c_class);
-    if(cturn){
-        boarde.classList.add(c_class);
-    }else{
-        boarde.classList.add(x_class);
-    }
+function handleClick(e) {
+  cell = e.target;
+  const currentClass = circleTurn ? o_class : x_class;
+  placeMark(cell, currentClass);
+  if (checkWin(currentClass)) {
+    endGame(false);
+  } else if (isDraw()) {
+    endGame(true);
+  } else {
+    swapTurns();
+  }
 }
 
-function chechwin(curr){
-    return win_com.some(combination=>{
-        return combination.every(index=>{
-            return cellele[index].classList.contains(curr);
-        })
-    })
-}
+startGame();
